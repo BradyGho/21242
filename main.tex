@@ -1,0 +1,501 @@
+\documentclass[11pt]{article}
+% ---------- Packages ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{parskip}           % space between paragraphs, no indents
+\usepackage{newpxtext,newpxmath} % nice Palatino-like text & math
+\usepackage{amsmath,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\let\openbox\undefined
+\usepackage[most]{tcolorbox}
+\usepackage{amsthm}
+\tcbset{
+  colback=gray!3,
+  colframe=gray!60!black,
+  boxrule=.5pt,
+  arc=2mm,
+  left=1em,right=1em,top=.6em,bottom=.6em,
+  before upper={\setlength{\parskip}{5pt plus 2pt minus 1pt}}
+}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black,citecolor=black]{hyperref}
+\usepackage{xparse}   
+% ---------- Header fields (edit these each assignment) ----------
+\newcommand{\course}{21242: Matrix Theory} % e.g., 21-127 or 21-128
+\newcommand{\psetnum}{1}
+\newcommand{\student}{Brady Gho}
+\newcommand{\psetdate}{September 3, 2025}
+% ---------- Page style ----------
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\student}
+\chead{Problem Set \psetnum}
+\rhead{\psetdate}
+\cfoot{\thepage\ of \pageref{LastPage}}
+% Optional: compact title block at top of first page (no title page)
+\newcommand{\maketop}{
+    \begin{center}
+    {\LARGE\bfseries \course}\\[3pt]
+    {\large Problem Set \psetnum}
+  \end{center}\vspace{1.5em}
+}
+
+% ---------- Problem environment (clearly differentiated) ----------
+\NewDocumentEnvironment{problem}{ o }{%
+  \begin{tcolorbox}[breakable,
+    colbacktitle=gray!75!black,
+    coltitle=white,
+    fonttitle=\bfseries,
+    toptitle=0.4ex,
+    bottomtitle=0.2ex,
+    title style={top=1.1ex,bottom=1.1ex},
+    title={\textbf{#1}},
+    arc=1.5mm
+  ]%
+}{%
+  \end{tcolorbox}%
+}
+
+\NewDocumentEnvironment{lemma}{ o }{%
+  \par\medskip\noindent%
+  \textbf{Lemma #1}\space\itshape%
+}
+{%
+  \par\normalfont%
+}
+
+\newcommand{\afsoc}{Assume for sake of contradiction}
+
+\newcommand{\vect}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+
+% ---------- Handy math commands ----------
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\st}{\;\middle\vert\;}    % set-builder: \{ x \in S \st ... \}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Lagr}{\mathcal{L}}
+% ---------- Enumerate defaults ----------
+\setlist[enumerate,1]{label=(\alph*),itemsep=.25em,topsep=.25em}
+% ---------- Document ----------
+\begin{document}
+\maketop
+% === Example usage (delete after copying the template) ===
+\begin{problem}[Problem 1A]
+Prove or disprove that $V = {\binom{v_1}{v_2} | v_1, v_2 \in \R, v_1+v_2 = 1}$ is an $\R\text{-vector space}$ when endowed with the usual operations
+\end{problem}
+\begin{proof}
+$V$ is not a vector space. For example, $\binom{1}{0}, \binom{0}{1} \in V$, but $\binom{1}{0}, \binom{0}{1} = \binom{1}{1} \notin V$, showing $V$ is not closed under addition.
+\end{proof}
+
+\begin{problem}[Problem 1B]
+Define the operation $\oplus$ on $\R^+ \times \R^+$ by $a\oplus b = a\cdot b$ and $\otimes$ on $\R\times\R^+$ by $a\otimes b = b^a$. Prove or disprove that $V=R^+$ is an $\R\text{-vector space}$ with $\oplus$ as the addition operation on $V$ and $\otimes$ as the scalar multiplication.
+\end{problem}
+\begin{proof}
+We can show $V$ satisfies all conditions for being a vector space through the following:
+
+\begin{enumerate}
+
+\item \textbf{Closed under operations:} $\forall \vec{a}, \vec{b} \in V$ we have $\vec{a}\oplus \vec{b} = a \cdot b$. Since $a$ and $b$ are positive $ab$ is positive; also, since $\R$ is closed under multiplication, $ab \in \R$. Thus, $V$ is closed under addition ($\oplus$).
+
+Additionally, for arbitrary $n \in R$ and $\vec{a}\in \R^+$, we have $a^b \in \R$ since $a>0$. Thus, $V$ is closed under multiplication ($\otimes$).
+
+\item \textbf{Associativity:} $\forall \vec{a}, \vec{b}, \vec{c} \in V$, we have $(\vec{a}\oplus \vec{b}) \oplus \vec{c} = (a\cdot b)\cdot c = a\cdot (b\cdot c) = \vec{a}\oplus (\vec{b} \oplus \vec{c})$ 
+
+\item \textbf{Commutativity:} $\forall \vec{a}, \vec{b} \in V$, we have $\vec{a} \oplus \vec{b} = a\cdot b = b \cdot a = \vec{b} \oplus \vec{a}$ 
+
+\item \textbf{Existence of zero vector:} Let $\vec{0} = 1$. $\vec{0}$ is in $V$ since $1\in \R^+$; additionally, $\forall a \in V$, we have $a \oplus \vec{0} = a \cdot 1 = a$
+
+\item \textbf{Existence of additive inverses:} $\forall \vec{a} \in V$, $\vec{a}^{-1}=\frac{1}{a}$. We can prove this because $\vec{a} \oplus \vec{a}^{-1} = a \cdot \frac{1}{a} = 1 = \vec{0}$. Since $a > 0$, $\frac{1}{a} \in \R^{+}$, so $\frac{1}{a} \in V$
+
+\item \textbf{Existence of scalar identity:} The scalar identity is the real number $1$, since $\forall a \in V$, $1 \otimes a = a^1 = a$. Note $1 \in \R$.
+
+\item \textbf{Associativity and Commutativity of scalar products:} For associativity, let $a, b \in \R$ and $\vec{v} \in V$. Then, $a\cdot (b \otimes \vec{v}) = a \otimes v^{b} = v^{ab} = (a\cdot b) \otimes \vec{v}$ 
+
+For commutativity, let $a, b \in \R$ and $\vec{v} \in V$. Then, $ab \otimes \vec{v} = a \otimes v^{b} = v^{ab} = v^{ba} = ba \otimes \vec{v}$
+
+\item \textbf{Distributive laws:} Let $a, b \in \R$ and $\vec{v}, \vec{u} \in V$ with real values $v$ and $u$ respectively. The following shows the distributive laws hold
+
+$$
+a \cdot (\vec{v} \oplus \vec{u}) = (v\cdot u)^{a} = v^{a}\cdot u^{a} = (a \otimes \vec{v}) \oplus (a \otimes \vec{u} )
+$$
+$$
+(a \cdot b)\otimes \vec{v} = v^{a+b} = v^{a} \cdot v^{b} = (a\otimes \vec{v}) \oplus (b\otimes \vec{v})
+$$
+
+\end{enumerate}
+\end{proof}
+
+\begin{problem}[Problem 1C]
+    With the same operations as above, prove or disprove $V=\Q^+$ is a $Q\text{-vector space}$
+\end{problem}
+\begin{proof}
+We can see $V$ is not a vector space because $\frac{1}{2}, 2 \in V$, but $\frac{1}{2} \otimes 2 = 2^{\tfrac{1}{2}} \notin V$, showing V is not closed under scalar multiplication ($\otimes$).
+\end{proof}
+
+\begin{problem}[Problem 1D]
+    Let $V$ be the set of polynomials of degree at most $3$ with coefficients in $\Q$. Prove or disprove the following: $V$ is a $Q$ vector space when endowed with the standard operations of polynomial addition and scalar multiplication.
+\end{problem}
+\begin{proof}
+We can show that $V$ satisfies all conditions for being a vector space through the following:
+
+\begin{enumerate}
+
+\item \textbf{Closed under operations:} Say we have polynomials
+$$p(x) = a_3x^3 + a_2x^2 + a_1x + a_0$$
+$$q(x) = b_3x^3 + b_2x^2 + b_1x + b_0$$
+We can prove $V$ is closed under polynomial addition through the following:
+\begin{align*}
+p(x) + q(x) &= (a_3x^3 + a_2x^2 + a_1x + a_0) + (b_3x^3 + b_2x^2 + b_1x + b_0) \\
+            &= (a_3+b_3)x^3 + (a_2+b_2)x^2 + (a_1+b_1)x + (a_0+b_0) 
+\end{align*}
+Define $c_i = a_i + b_i$. Then, we have 
+$$(a_3+b_3)x^3 + (a_2+b_2)x^2 + (a_1+b_1)x + (a_0+b_0) = c_3x^3, c_2x^2, c_1x + c_0$$
+Note that $c_i \in Q$ since $a_i, b_i \in Q$ and $\Q$ is closed under addition. This implies that $c_3x^3, c_2x^2, c_1x + c_0$ is also an element of $V$
+
+If we let $r\in Q$ be some arbitrary constant, we can prove $V$ is closed under scalar multiplication through the following:
+\begin{align*}
+r\cdot p(x)   &= r(a_3x^3 + a_2x^2 + a_1x + a_0) \\
+        &= ra_3x^3 + ra_2x^2 + ra_1x + ra_0
+\end{align*}
+Define $d_i = ra_i$. Then, we have 
+$$ra_3x^3 + ra_2x^2 + ra_1x + ra_0 = d_3x^3 + d_2x^2 + d_1x + d_0$$
+Note that $d_i \in \Q$ since $\Q$ is closed under multiplication and $a_i \in \Q$. Thus, $d_3x^3 + d_2x^2 + d_1x + d_0$ is also an element in $V$
+
+
+\item \textbf{Associativity:} Say we have polynomials
+$$p(x) = a_3x^3 + a_2x^2 + a_1x + a_0$$
+$$q(x) = b_3x^3 + b_2x^2 + b_1x + b_0$$
+$$r(x)=c_3x^3, c_2x^2, c_1x + c_0$$ 
+
+such that $a_0, \cdots a_3, b_0 \cdots b_3, c_0\cdots c_3 \in \Q$ (and therefore $p(x), q(x), r(x) \in V$). We can prove associativity through the following re-arrangement:
+\begin{align*}
+(p(x) + q(x)) + r(x) &= (a_3x^3 + a_2x^2 + a_1x + a_0 + b_3x^3 + b_2x^2 + b_1x + b_0) + c_3x^3, c_2x^2, c_1x + c_0 \\
+&= (a_3+b_3+c_3)x^3 + (a_2+b_2+c_2)x^2 + (a_1+b_1+c_1)x + (a_0+b_0+c_0) \\
+&= (a_3+(b_3+c_3))x^3 + (a_2+(b_2+c_2))x^2 + (a_1+(b_1+c_1))x + (a_0+(b_0+c_0)) \\
+&= a_3x^3 + a_2x^2 + a_1x + a_0 + (b_3x^3 + b_2x^2 + b_1x + b_0 + c_3x^3, c_2x^2, c_1x + c_0) \\
+&= p(x) + (q(x) + r(x))
+\end{align*}
+
+\item \textbf{Commutativity:} Say we have polynomials
+$$p(x) = a_3x^3 + a_2x^2 + a_1x + a_0$$
+$$q(x) = b_3x^3 + b_2x^2 + b_1x + b_0$$ 
+
+such that $a_0, \cdots a_3, b_0 \cdots b_3, \in \Q$ (and therefore $p(x), q(x) \in V$). We can prove commutativity through the following re-arrangement:
+\begin{align*}
+p(x) + q(x) &= (a_3x^3 + a_2x^2 + a_1x + a_0) + (b_3x^3 + b_2x^2 + b_1x + b_0) \\
+            &= (a_3+b_3)x^3 + (a_2+b_2)x^2 + (a_1+b_1)x + (a_0+b_0) \\
+            &= (b_3+a_3)x^3 + (b_2+a_2)x^2 + (b_1+a_1)x + (b_0+a_0) \\
+            &= (b_3x^3 + b_2x^2 + b_1x + b_0) + (a_3x^3 + a_2x^2 + a_1x + a_0) \\
+            &= q(x) + p(x)
+\end{align*}
+
+\item \textbf{Existence of zero vector:} The zero vector in $V$ is $\vec{0} = 0x^3 + 0x^2 + 0x + 0 = 0$. Note $\vec{0}$ is in $V$ since it is a polynomial with all $0$ coefficients and $0\in \Q$. In addition, given $p(x) = a_3x^3 + a_2x^2 + a_1x + a_0$ with $a_0, \cdots a_3 \in \Q$ (and thus $p(x)\in V$), we have
+\begin{align*}
+\vec{0} + p(x)  &= 0x^3 + 0x^2 + 0x + 0 + a_3x^3 + a_2x^2 + a_1x + a_0 \\
+                &= a_3x^3 + a_2x^2 + a_1x + a_0 \\
+                &= p(x)
+\end{align*}
+\item \textbf{Existence of additive inverse:} Say we have polynomial $p(x) = a_3x^3 + a_2x^2 + a_1x + a_0$. Then, $p(x)$'s additive inverse is $-p(x) = -a_3x^3 - a_2x^2 - a_1x - a_0$. The following shows why:
+\begin{align*}
+p(x) + (-p(x))  &= (a_3x^3 + a_2x^2 + a_1x + a_0) + (-a_3x^3 - a_2x^2 - a_1x - a_0) \\
+                &= (a_3+(-a_3)x^3 + (a_2+(-a_2)x^2 + (a_1+(-a_1)x + (a_0 + (-a_0)) \\
+                &= 0
+\end{align*}
+Note that $-a_i \in \Q$ since $a_i \in Q$ and $Q$ is closed under multiplication, so $-p(x) \in V$
+
+\item \textbf{Existence of scalar identity:} The scalar identity is the rational number $1$ since $\forall p(x) \in V$, with $p(x)=a_3x^3 + a_2x^2 + a_1x + a_0$ and $a_0, \cdots a_3\in Q$, we have
+\begin{align*}
+1 \cdot p(x)  &= 1\cdot (a_3x^3 + a_2x^2 + a_1x + a_0)  \\
+                &= (1\cdot a_3)x^3 + (1\cdot a_2)x^2 + (1\cdot a_1)x + (1 \cdot a_0) \\
+                &= a_3x^3 + a_2x^2 + a_1x + a_0 \\
+                &= p(x)
+\end{align*}
+
+\item \textbf{Associativity and Commutativity of scalar products:} Let $n, m \in \Q$ be arbitrary scalars, and $p(x) \in V$, with $p(x)=a_3x^3 + a_2x^2 + a_1x + a_0$ and $a_0, \cdots a_3\in Q$. Then, we can write our equation as
+\begin{align}
+n \cdot (m \cdot p(x))  &= n \cdot (m \cdot (a_3x^3 + a_2x^2 + a_1x + a_0)) \\
+                &= n \cdot ((m \cdot a_3)x^3 + (m \cdot a_2)x^2 + (m \cdot a_1)x + (m \cdot a_0))  \\
+                &= (n\cdot m \cdot a_3)x^3 + (n\cdot m \cdot a_2)x^2 + (n\cdot m \cdot a_1)x + (n\cdot m \cdot a_0) \\
+                &= ((n\cdot m) \cdot a_3)x^3 + ((n\cdot m) \cdot a_2)x^2 + ((n\cdot m) \cdot a_1)x + ((n\cdot m) \cdot a_0) \\
+                &= (n \cdot m) \cdot (a_3x^3 + a_2x^2 + a_1x + a_0)  \\
+                &= (n \cdot m) \cdot p(x) 
+\end{align}
+which proves associativity. Additionally, starting from step (3), we can rewrite the equation as
+\begin{align*}
+n \cdot m \cdot p(x) &= (n\cdot m \cdot a_3)x^3 + (n\cdot m \cdot a_2)x^2 + (n\cdot m \cdot a_1)x + (n\cdot m \cdot a_0)  \\
+&= ((m \cdot n) \cdot a_3)x^3 + ((m\cdot n) \cdot a_2)x^2 + ((m\cdot n)) \cdot a_1)x + ((m\cdot n) \cdot a_0) \\
+                &= (m \cdot n) \cdot (a_3x^3 + a_2x^2 + a_1x + a_0)  \\
+                &= (m \cdot n) \cdot p(x) 
+\end{align*}
+which proves commutativity.
+
+\item \textbf{Distributive laws:}  Let $n, m \in \Q$ be arbitrary scalars, and $p(x), q(x) \in V$, with $p(x)=a_3x^3 + a_2x^2 + a_1x + a_0$ and $a_0, q(x)=b_3x^3 + b_2x^2 + b_1x + b_0$ and $a_i, b_i \in Q$. The following shows the distributive laws hold:
+\begin{align*}
+n(p(x) + q(x))  &= n(a_3x^3 + a_2x^2 + a_1x + a_0 + b_3x^3 + b_2x^2 + b_1x + b_0) \\
+                &= na_3x^3 + na_2x^2 + na_1x + na_0 + nb_3x^3 + nb_2x^2 + nb_1x + nb_0 \\
+                &= n(a_3x^3 + a_2x^2 + a_1x + a_0) + n(b_3x^3 + b_2x^2 + b_1x + b_0) \\
+                &= np(x) + nq(x)
+\end{align*}
+\begin{align*}
+(n+m)(p(x)) &= (n+m)(a_3x^3 + a_2x^2 + a_1x + a_0) \\
+                &= (n+m)a_3x^3 + (n+m)a_2x^2 + (n+m)a_1x + (n+m)a_0 \\
+                &= (na_3+ma_3)x^3 + (na_2+ma_2)x^2 + (na_1+ma_1)x + (na_0+ma_0) \\
+                &= (na_3x^3 + na_2x^2 + na_1x + na_0) + (ma_3x^3 + ma_2x^2 + ma_1x + ma_0) \\
+                &= n(a_3x^3 + a_2x^2 + a_1x + a_0) + m(a_3x^3 + a_2x^2 + a_1x + a_0) \\
+                &= np(x) + ma(x)
+\end{align*}
+
+\end{enumerate}
+\end{proof}
+
+\begin{problem}[Problem 2]
+    Use $0\vec{v} = \vec{0}$ to prove $(-1)\cdot \vec{v} = -\vec{v}$
+\end{problem}
+\begin{proof}
+We will first motivate our proof. Let $\vec{v}$ be an arbitrary vector within a vector space. We can rearrange our original equation in the following way
+$$(-1)\cdot \vec{v} = -\vec{v} $$
+$$(-1)\cdot \vec{v} +\vec{v} = -\vec{v}+\vec{v} $$
+Using the distributive property to factor on the left side, and canceling $-\vec{v}+\vec{v}$ on the right side, we get
+$$(-1)\cdot \vec{v} +\vec{v} = \vec{0} $$
+$$(1+(-1))\cdot \vec{v}= \vec{0} $$
+$$(0) \cdot \vec{v} = \vec{0}$$
+Using the fact $0\cdot \vec{v} = \vec{0}$, we can simplify further
+$$(0) \cdot \vec{v} = \vec{0}$$
+$$\vec{0} = \vec{0}$$
+We can thus write this proof "forward" in the following manner:
+\begin{align*}
+\vec{0} &= \vec{0} \\
+(0) \cdot \vec{v} &= \vec{0} \\
+(1+(-1))\cdot \vec{v}&= \vec{0}  \\
+(-1)\cdot \vec{v} +\vec{v} &= \vec{0}  \\
+(-1)\cdot \vec{v} +\vec{v} &= -\vec{v}+\vec{v}  \\
+(-1)\cdot \vec{v} &= -\vec{v}  \\
+\end{align*}
+\end{proof}
+
+\begin{problem}[Problem 3]
+Prove for $\F$-vector space $V$ that for any $\vec{v} \in V$ and $c\in\F$, if $c\vec{v} = \vec{0}$, then either $c=0$ or $\vec{v} = \vec{0}$
+\end{problem}
+
+\begin{proof}
+We proceed with proof by contradiction. Say we have $c\in\F$ and $\vec{v}\in V$ such that $c\neq 0, \vec{v}\neq \vec{0},$ and $c\vec{v} = \vec{0}$. Since $c\neq 0$, $c^{-1}$ exist, so we can multiply both sides by $c^{-1}$ to get
+$$\frac{1}{c} \cdot c\vec{v} = \frac{1}{c}\cdot \vec{0} $$
+$$\vec{v} = \frac{1}{c}\cdot \vec{0} $$
+Note that $\forall k\in \F$, $k\cdot \vec{0} = k \cdot 0 \cdot \vec{0} = (k\cdot 0)\cdot \vec{0} = 0\cdot \vec{0} = \vec{0}$, so $\frac{1}{c}\cdot \vec{0} = \vec{0}$. Thus, our equation becomes 
+$$\vec{v} = \vec{0} $$
+However, this is a contradiction, because we assumed $\vec{v}\neq \vec{0}$. Thus, if $c\vec{v} = \vec{0}$, either $c=0$ or $\vec{v}=\vec{0}$
+\end{proof}
+
+\begin{problem}[Problem 4A]
+    Consider $\R$ as a vector space over $\R$ with usual arithmetic operations. Prove that any two vectors are linearly dependent
+\end{problem}
+
+\begin{proof}
+Say we have two arbitrary vectors in $\R$, $\vec{a} = a$ and $\vec{b} = b$ where $a, b \in \R$. Note that $\vec{a} = a = \frac{a}{b} \cdot b = \frac{a}{b} \vec{b}$, which shows that $\vec{a}$ can be written as a linear combination of $\vec{b}$. 
+\end{proof}
+
+\begin{problem}[Problem 4B]
+    Consider $\R$ as a vector space over $\Q$ with the usual arithmetic operations. Give an example of two linearly independent vectors; prove they are independent
+\end{problem}
+\begin{proof}
+    Consider the two vectors $\vec{a} = 1, \vec{b} = \sqrt{2}$. (Note $\vec{a}, \vec{b} \in \R$). We proceed by proof by contradiction: Assume $\vec{b}$ is a linear combination of $\vec{a}$ such that $c\vec{a} = \vec{b}$ for some $c\in \Q$. Since $c \in Q$, we can write $c=\frac{x}{y}$ for some $x, y \in \Z$ and $\gcd(x, y) = 1$. Thus, our expression is 
+    $$c\vec{a} = \vec{b}$$
+    $$c = \sqrt{2}$$
+    $$\frac{x}{y} = \sqrt{2}$$
+By Lemma 1, $\sqrt{2}$ is irrational. Thus, it cannot be represented in the form $\frac{x}{y}$ where $x, y \in \Z$, and there is a contradiction
+\end{proof}
+
+\begin{lemma}[1]
+    $\sqrt{2}$ is irrational
+\end{lemma}
+\begin{proof}
+    Assume $\sqrt{2}$ is rational, such that it can be represented in the form $\frac{x}{y}$ and $\gcd(x, y) = 1$ (in other words, $\frac{x}{y}$ is simplified). We can do the following manipulations:
+    \begin{align*}
+        \sqrt{2} &= \frac{x}{y} \\
+        y \sqrt{2} &= x \\
+        2 y^2 &= x^2
+    \end{align*}
+    The above equation implies $2\ |\ x$, so we can write $x=2k$ for some $k\in\Z$. We can again rewrite the above equation as:
+    \begin{align*}
+        2 y^2 &= x^2 \\
+        2 y^2 &= (2k)^2 \\
+        2 y^2 &= 4k^2 \\
+        y^2 &= 2k^2
+    \end{align*}
+    The above equation implies $2 \ |\ y$. However, this is a contradiction to our original assumption that $\gcd(x, y) = 1$
+\end{proof}
+
+
+\begin{problem}[Problem 4C]
+    Prove that for $\R$ as a vector space over $\Q$, there is no finite list $\Lagr$ of vectors for which span$(\Lagr)=\R$
+\end{problem}
+
+\begin{proof}
+While not a full proof, here is an outline:
+
+Say we can represent the reals as a linear combination of $n$ vectors, where $n$ is an finite integer. We may be able to write this list of $n$ vectors as a series of $\log(p)$'s, where $p$ is prime. We can then write this linear combination of $\log(p)$'s as $a_1\log(2) + a_2\log(3) +\cdots a_n \log(p_n) = \log(2^{a_1} \cdot 3^{a_2} \cdots p_n^{a_n})$. However, this is a contradiction since there are an infinite number of primes, and thus we cannot write $\log(p_{n+1})$ in this form.
+\end{proof}
+
+\begin{problem}[Problem 5]
+    Prove that if $\Lagr$ is a list of vectors in the $\F$-vector space $V$, and $\vec{w_1}, \cdots \vec{w_k} \in \text{span}(\Lagr)$, then span$(\vec{w_1}, \cdots \cdots \vec{w_k}) \subseteq$ span$(\Lagr)$
+\end{problem}
+
+\begin{proof}
+    Say we have vector $\vec{v} \in$ span$(\vec{w_1}, \cdots \vec{w_k})$. Then, we can write $\vec{v}$ as 
+    $$\vec{v} = a_1\vec{w_1} + a_2\vec{w_2} + \cdots a_k\vec{w_k} = \sum^k_{i=1}a_i\vec{w_i}$$
+    where $a_i \in \F$. Since $\vec{w_1}, \cdots \vec{w_k} \in $ span$(\Lagr)$, if $\Lagr = \{b_1, b_2, \cdots b_n\}$, we can write each $\vec{w_i} = c_{1_i}\vec{b_1} + c_{2_i}\vec{b_1}\cdots + c_{n_i}\vec{b_n}$. Now, if we substitute back into our original equation:
+    \begin{align*}
+    \sum^k_{i=1}a_i\vec{w_i} &= \sum^k_{i=1}a_i(c_{1_i}\vec{b_1} + \cdots + c_{n_i}\vec{b_n}) \\
+    &= \sum^k_{i=1}(a_ic_{1_i}\vec{b_1}) + \sum^k_{i=1}(a_ic_{2_i}\vec{b_2}) + \cdots \sum^k_{i=1}(a_ic_{n_i}\vec{b_n}) \\
+    &= \sum^k_{i=1}(a_ic_{1_i})\vec{b_1} + \sum^k_{i=1}(a_ic_{2_i})\vec{b_2}+\cdots \sum^k_{i=1}(a_ic_{n_i})\vec{b_n}
+    \end{align*}
+    Since $a_i, c_{j_i}\in \F$ where $1 \leq i \leq k$ and $1\leq j \leq n$, and $\F$ is closed under arithmetic, $\sum^k_{i=1}(a_ic_{j_i})$ where $1\leq j \leq n$ is also in $\F$.
+    Thus, we have written a $\vec{v}$ as a linear combination of $\Lagr$
+\end{proof}
+
+\begin{problem}[Problem 6]
+    Fix a positive integer $k$ and define vector space $V_k$ over $\R$ such that Vectors are lists $(a_{-k}, \cdots a_{-1}, a_0, a_1, \cdots a_k)$ of real numbers and $a_j = j\cdot a_{-j}$ for each $j=1, \cdots, k$
+
+    \begin{enumerate}[label=\arabic*.]
+        \item Prove that $V_k$ is indeed a vector space with pointwise addition and scalar multiplication.
+        \item Give two different bases for $V_k$ (with proofs they are bases)
+    \end{enumerate}
+\end{problem}
+    \begin{enumerate}[label=\arabic*.]
+        \item \begin{proof} We can go through our vector space axioms to prove that $V$ is indeed a vector space. However, before we start, we can define some common terms which will be used repeatedly:
+
+        Let scalars $n, m \in \R$, and $\vec{v}, \vec{u}, \vec{w} \in V_K$ such that
+        $$\vec{v} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\}$$
+        $$\vec{u} = \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ b_k \\} = \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ k b_{-k} \\}$$
+        $$\vec{w} = \vect{c_{-k} \\ \vdots \\c_0 \\ \vdots \\ c_k \\} = \vect{c_{-k} \\ \vdots \\c_0 \\ \vdots \\ k c_{-k} \\}$$
+
+        \begin{enumerate}
+        
+        \item \textbf{Closed under operations:} 
+        
+        If we denote $s_i=a_i+b_i$, then 
+        $$\vec{v}+\vec{u} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} + \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ k b_{-k} \\} = \vect{a_{-k}+b_{-k} \\ \vdots \\a_0+b_0 \\ \vdots \\ k(a_{-k}+ b_{-k}) \\} = \vect{s_{-k} \\ \vdots \\s_0 \\ \vdots \\ ks_{-k} }$$
+        which in itself is a vector in $V$. Additionally, for $t_i = na_{i}$: 
+        \[n\vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} } = \vect{na_{-k} \\ \vdots \\na_0 \\ \vdots \\ nk a_{-k} }
+        = \vect{t_{-k} \\ \vdots \\t_0 \\ \vdots \\ k t_{-k} }
+        \]
+        which is again a vector in $V$. Thus, $V$ is closed under operations.
+        \item \textbf{Associativity:} We add $\vec{v}$ and $\vec{u}$ to show associativity:
+        $$
+        \vec{v}+\vec{u} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} + \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ k b_{-k} \\} 
+        = \vect{a_{-k}+b_{-k} \\ \vdots \\a_0+b_0 \\ \vdots \\ k(a_{-k}+ b_{-k}) \\} 
+        = \vect{b_{-k}+a_{-k} \\ \vdots \\b_0+a_0 \\ \vdots \\ k(b_{-k} + a_{-k}) \\} 
+        = \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ k b_{-k} \\} + \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} 
+        = \vec{u} + \vec{v}
+        $$
+        
+        \item \textbf{Commutativity:} We add $\vec{v}, \vec{u}, \vec{w}$ to see commutativity:
+        
+        \begin{align*}
+        (\vec{v}+\vec{u})+\vec{w} 
+        &= \left(\vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} + \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ k b_{-k} \\}\right) +  \vect{c_{-k} \\ \vdots \\c_0 \\ \vdots \\ k c_{-k}}\\
+        &= \vect{a_{-k}+b_{-k} \\ \vdots \\a_0+b_0 \\ \vdots \\ k(a_{-k}+ b_{-k}) \\}  + \vect{c_{-k} \\ \vdots \\c_0 \\ \vdots \\ k c_{-k}}\\
+        &= \vect{a_{-k}+b_{-k}+c_{-k} \\ \vdots \\a_0+b_0+c_0 \\ \vdots \\ k(a_{-k}+ b_{-k} + c_{-k}) \\} \\
+        &= \vect{a_{-k}+(b_{-k}+c_{-k}) \\ \vdots \\a_0+(b_0+c_0) \\ \vdots \\ k(a_{-k}+(b_{-k} + c_{-k})) \\} \\
+        &= \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} + \left( \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ k b_{-k} \\} +  \vect{c_{-k} \\ \vdots \\c_0 \\ \vdots \\ k c_{-k}} \right) \\
+        &=\vec{v}+(\vec{u}+\vec{w})
+        \end{align*}
+        
+        \item \textbf{Existence of zero vector:} The zero vector exist and is
+        $$\vec{0} = \vect{ 0 \\ \vdots \\ 0 \\ \vdots \\ 0 }$$ 
+        such that $\vec{0}$'s dimension is $2k+1$. Note we can write $\vec{0}$ as
+        $$\vec{0} = \vect{0 \\ \vdots \\ 0 \\ \vdots \\ 0} = \vect{0 \\ \vdots \\ 0 \\ \vdots \\ k\cdot 0}$$
+        which shows that $\vec{0}$ satisfies $a_j=j\cdot a_{-j}$ and is therefore in $V$. Additionally, 
+        $$\vec{v} + \vec{0}
+        = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} + \vect{0 \\ \vdots \\ 0 \\ \vdots \\ 0} 
+        = \vect{a_{-k} +0 \\ \vdots \\a_0+0 \\ \vdots \\ k a_{-k} +0 \\} 
+        = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} 
+        = \vec{v}
+        $$
+        
+        \item \textbf{Existence of additive inverses:} The additive inverse of $\vec{v}$ is 
+        $$-\vec{v} = \vect{-a_{-k} \\ \vdots \\-a_0 \\ \vdots \\ -a_k \\} = \vect{-a_{-k} \\ \vdots \\-a_0 \\ \vdots \\ -k a_{-k} \\}$$
+        Note $-\vec{v}$ exist in $V$ because it satisfies $a_j=j\cdot a_{-j}$. Additionally, 
+        $$\vec{v} + (-\vec{v}) 
+        = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_{k} \\} + \vect{-a_{-k} \\ \vdots \\-a_0 \\ \vdots \\ -a_{k} \\} 
+        = \vect{a_{-k}+ (-a_{-k} \\ \vdots \\a_0+(-a_0) \\ \vdots \\ a_{k} + (-a_k) \\} 
+        = \vect{0 \\ \vdots \\ 0 \\ \vdots \\ 0}
+        = \vec{0}
+        $$ 
+        \item \textbf{Existence of scalar identity:} The scalar identity is $1$ since $1\in\R$ and 
+        \[
+        1\cdot \vec{v}\ = 1\cdot \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\} 
+        = \vect{1 \cdot a_{-k} \\ \vdots \\ 1 \cdot a_0 \\ \vdots \\ 1 \cdot a_k \\} = \vec{v}
+        \]
+        
+        \item \textbf{Associativity and Commutativity of scalar products:} First, we will prove associativity:
+        \[
+        n\cdot (m\cdot \vec{v}) 
+        = n \cdot \left(m \cdot \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\} \right) 
+        = n \cdot \vect{ma_{-k} \\ \vdots \\ma_0 \\ \vdots \\ ma_k \\} 
+        = \vect{nma_{-k} \\ \vdots \\nma_0 \\ \vdots \\ nma_k \\} 
+        = \vect{(nm)a_{-k} \\ \vdots \\(nm)a_0 \\ \vdots \\ (nm)a_k \\} 
+        = (n \cdot m) \cdot \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\}
+        = (n\cdot m)\cdot \vec{v}
+        \]
+        For commutativity:
+        \[
+        n\cdot m\cdot \vec{v}
+        = n \cdot m \cdot \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\}
+        = \vect{nma_{-k} \\ \vdots \\nma_0 \\ \vdots \\ nma_k \\} 
+        = \vect{mna_{-k} \\ \vdots \\mna_0 \\ \vdots \\ mna_k \\} 
+        = m \cdot n \cdot \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\}
+        = m \cdot n \cdot \vec{v}
+        \]
+        
+        \item \textbf{Distributive laws:} We prove the two distributive laws:
+        \[
+        (n+m)\vec{v}
+        =  n + m \cdot \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\}
+        = \vect{(n+m)a_{-k} \\ \vdots \\(n+m)a_0 \\ \vdots \\ (n+m)a_k \\} 
+        = \vect{na_{-k} \\ \vdots \\na_0 \\ \vdots \\ na_k \\} +\vect{ma_{-k} \\ \vdots \\ma_0 \\ \vdots \\ ma_k \\} 
+        = n\vec{v} +m\vec{v}
+        \]
+
+        \begin{align*}
+        n(\vec{v} + \vec{u}) 
+        &= n\left(\vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\} + \vect{b_{-k} \\ \vdots \\b_0 \\ \vdots \\ b_k \\} \right) 
+        = n\vect{a_{-k}+b_{-k} \\ \vdots \\a_0+b_0 \\ \vdots \\ a_{k}+ b_{k}) \\}  \\
+        &= \vect{n(a_{-k}+b_{-k}) \\ \vdots \\n(a_0+b_0) \\ \vdots \\ n(a_{k}+ b_{k}) \\}
+        = \vect{na_{-k} \\ \vdots \\na_0 \\ \vdots \\ na_k \\} + \vect{nb_{-k} \\ \vdots \\nb_0 \\ \vdots \\ nb_k \\}
+        = n\vec{v} + n\vec{u}
+        \end{align*}
+        
+        \end{enumerate}\end{proof}  
+
+        \item One possible basis is 
+        $$B=\left\{\vect{1 \\ 0 \\ \vdots \\0 \\ k}, \vect{0 \\ 1 \\ \vdots \\k-1 \\ 0}, \cdots \vect{0 \\ \vdots \\ 1 \\ \vdots \\ 0}\right\}$$
+        
+        For notation purpose, we can sequence each of these vectors as $b_k, b_{k-1}, \cdots b_0$ respectively. Note that $B$ is independent since there is a unique representation of $\vec{0}$. To see why this is the case, assume for sake of contradiction
+        $$\vec{0} = n_0\vec{b_0} + n_1\vec{b_1}+ \cdots n_k\vec{b_k}$$
+        for some $n_i \in \R$ and $n_i\neq 0$. Then, row $k+1$ (the middle-most row) can only be $0$ when $n_0=0$, row $(k+1)+1$ can only be $0$ when $n_1 =0$, etc. In general, row $k+1+i$ can only be zero when $n_i=0$. However, this is a contradiction, showing that $\vec{0}$ has no nontrivial representations. 
+        
+        Additionally, we can show span$(B) =V$. Say we have $\vec{v}\in V$ and $a_i \in\R$. We can write
+        $$\vec{v} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ a_k \\} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} = \sum^k_{i=0} a_{-i}b_i$$
+        thus showing $B$ is indeed a basis.
+
+        Another possible basis is 
+        $$C=\left\{\vect{2 \\ 0 \\ \vdots \\0 \\ 2k}, \vect{0 \\ 2 \\ \vdots \\2(k-1) \\ 0}, \cdots \vect{0 \\ \vdots \\ 2 \\ \vdots \\ 0}\right\}$$
+
+        We can again sequence each of these vectors in $C$ as $c_k, c_{k-1}, \cdots c_0$ respectively. Notice how $c_i = 2b_i$. While the coefficients are different, the structure of $B$ wasn't changed, so we can use similar logic to say when solving $\vec{0} = n_0\vec{c_0} + n_1\vec{c_1}+ \cdots n_k\vec{c_k}$, row $k+1+i$ can only be zero when $n_i=0$. Thus $\vec{0}$ has only the trivial representation under $C$, and $C$ is independent.
+        
+        Additionally, span$(C)=V$ because we can write any $\vec{v}\in V$ as 
+        $$\vec{v} = \vect{a_{-k} \\ \vdots \\a_0 \\ \vdots \\ k a_{-k} \\} = \frac{1}{2}\sum^k_{i=0} a_{-i}c_i$$
+        
+    \end{enumerate}
+\end{document}
